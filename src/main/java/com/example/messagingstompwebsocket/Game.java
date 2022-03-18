@@ -38,6 +38,7 @@ public class Game {
     return this.state;
   }
   public String getId(){
+    System.out.println("get ID" + this.id);
     return this.id;
   }
   

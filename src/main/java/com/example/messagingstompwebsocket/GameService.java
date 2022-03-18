@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 public class GameService {
   
    public Game getGame(){
+     System.out.println();
+     System.out.println("!!!!! GAME SERVICE!!!!");
+     System.out.println();
+     System.out.println();
      return new Game();
    } 
 

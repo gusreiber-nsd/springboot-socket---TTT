@@ -1,5 +1,17 @@
 var stompClient = null;
 
+var myBody = document.getElementById("myBody");
+myBody.addEventListener(
+  'click', 
+  event => {
+    console.log(event);
+    alert("my body");
+  }
+);
+
+
+var myHead = $("#myBody .head");
+
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -18,10 +30,13 @@ function connect() {
   stompClient.connect({}, function (frame) {
     setConnected(true);
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/ttt', function (greeting) {
-        showGreeting(JSON.parse(greeting.body).content);
+    stompClient.subscribe('/topic/ttt', function (move) {
+        showMove(JSON.parse(move.body).content);
     });
     console.log('create game...');
+    console.log(socket);
+    console.log(frame);
+    console.log(stompClient);
     doGame();
   });
 }
@@ -37,11 +52,19 @@ function doGame(){
   stompClient.send("/app/start",{},JSON.stringify({}));
 }
 function sendName() {
-  stompClient.send("/app/game", {}, JSON.stringify({'name': $("#name").val()}));
+  stompClient.send("/app/game", {}, JSON.stringify({'move': $("#name").val()}));
 }
 
-function showGreeting(message) {
-  $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function showMove(message) {
+  var $ttt = $("#ttt").empty();
+  for(var i = 0; i < message[0].length; i ++){
+    var $tr = $("<tr />").appendTo($ttt);
+    for(var j = 0; j < message[0][i].length; j++){
+      var $td = $("<td>").appendTo($tr);
+      $td.append(message[0][i][j]);      
+    }
+  }
+  
 }
 
 $(function () {
